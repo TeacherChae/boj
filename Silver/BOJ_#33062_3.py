@@ -1,6 +1,6 @@
 T = int(input())
 for _ in range(T):
-    N = int(inpu())
+    N = int(input())
 
     answer = 0
     lo, hi = 45, 49
