@@ -45,4 +45,4 @@ while True:
         break
     visited.add(state)
 
-print(broken_count)
+
