@@ -7,4 +7,4 @@ for num in map(int, input().split()):
             count += 1
     if count == 1:
         prime_num.append(num)
-print(prime_num)
+print(len(prime_num))
