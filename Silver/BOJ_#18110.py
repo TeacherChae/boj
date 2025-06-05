@@ -1,4 +1,5 @@
-import math
+import sys
+input = sys.stdin.readline
 
 def roundUp(num):
     if(num - int(num)) >= 0.5:
@@ -11,11 +12,7 @@ if n == 0:
     print(0)
 else:
     #1. 전부 받는다.
-    ops = []
-    for i in range(n):
-        ops.append(int(input()))
-    #2. 오름차순으로 재정렬한다.
-    ops.sort()
+    ops = sorted([int(input()) for i in range(n)])
     #3. 절사 진행.
     border = roundUp(n * 0.15)
     #4. 평균 구하기.
