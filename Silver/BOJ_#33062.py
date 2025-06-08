@@ -32,16 +32,29 @@ def rounding(n):
 
 def chain_rounding(n):
     results = []
-    for i in range(1, len(n)+1):
+    for i in range(1, len(str(n)+1)):
         a = int(n) % (10 ** i)
-        if str(a)[0] >= 5:
-            result = int(n) - a + (10**len(a))
+        if int(str(a)[0]) >= 5:
+            result = int(n) - a + (10**len(str(a)))
             results.append(result)
         else:
             result = int(n) - a
             results.append(result)
     return results
 
-x = str(input())
-print(rounding(x))
-print(chain_rounding(x))
+def count_difference(n):
+    i = 0
+    for item in chain_rounding(n):
+        if item != rounding(n):
+            i += 1
+        else:
+            continue
+    return i
+
+N = int(input())
+for i in range(N):
+    count = 0
+    x = str(input())
+    for j in range(2, int(x)+1):
+        count += count_difference(j)
+    print(count)
