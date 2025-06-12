@@ -1,10 +1,3 @@
-'''
-cn >= a_1 * n + a_0
-n >= a_0 / (c-a_1)
-and
-n >= n_0
-'''
-
 a_1, a_0 = map(int, input().split())
 c = int(input())
 n_0 = int(input())

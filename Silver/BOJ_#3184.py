@@ -1,99 +1,51 @@
-'''
-문제
+R, C = map(int, input().split())
+grid = [list(input()) for _ in range(R)]
 
-미키의 뒷마당에는 특정 수의 양이 있다. 그가 푹 잠든 사이에 배고픈 늑대는 마당에 들어와 양을 공격했다.
+dx = [0, 0, -1, 1]
+dy = [-1, 1, 0, 0]
 
-마당은 행과 열로 이루어진 직사각형 모양이다. 글자 '.' (점)은 빈 필드를 의미하며, 글자 '#'는 울타리를, 'o'는 양, 'v'는 늑대를 의미한다.
+def dfs_stack(x, y, mark_char):
+    stack = [(x, y)]
+    region = []
 
-한 칸에서 수평, 수직만으로 이동하며 울타리를 지나지 않고 다른 칸으로 이동할 수 있다면, 두 칸은 같은 영역 안에 속해 있다고 한다. 마당에서 "탈출"할 수 있는 칸은 어떤 영역에도 속하지 않는다고 간주한다.
+    while stack:
+        cx, cy = stack.pop()
+        if not (0 <= cx < R and 0 <= cy < C):
+            continue
+        if grid[cx][cy] == '#' or grid[cx][cy] == mark_char:
+            continue
 
-다행히 우리의 양은 늑대에게 싸움을 걸 수 있고 영역 안의 양의 수가 늑대의 수보다 많다면 이기고, 늑대를 우리에서 쫓아낸다. 그렇지 않다면 늑대가 그 지역 안의 모든 양을 먹는다.
+        region.append(grid[cx][cy])
+        grid[cx][cy] = mark_char
 
-맨 처음 모든 양과 늑대는 마당 안 영역에 존재한다.
+        for i in range(4):
+            nx = cx + dx[i]
+            ny = cy + dy[i]
+            stack.append((nx, ny))
 
-아침이 도달했을 때 살아남은 양과 늑대의 수를 출력하는 프로그램을 작성하라.
+    return region
 
-입력
+for i in range(R):
+    for j in [0, C - 1]:
+        if grid[i][j] != '#' and grid[i][j] != 'X':
+            dfs_stack(i, j, 'X')
+for j in range(C):
+    for i in [0, R - 1]:
+        if grid[i][j] != '#' and grid[i][j] != 'X':
+            dfs_stack(i, j, 'X')
 
-첫 줄에는 두 정수 R과 C가 주어지며(3 ≤ R, C ≤ 250), 각 수는 마당의 행과 열의 수를 의미한다.
+total_sheep = 0
+total_wolf = 0
 
-다음 R개의 줄은 C개의 글자를 가진다. 이들은 마당의 구조(울타리, 양, 늑대의 위치)를 의미한다.
+for i in range(R):
+    for j in range(C):
+        if grid[i][j] not in ['#', 'X']:
+            region = dfs_stack(i, j, 'X')
+            sheep = region.count('o')
+            wolf = region.count('v')
+            if sheep > wolf:
+                total_sheep += sheep
+            else:
+                total_wolf += wolf
 
-출력
-
-하나의 줄에 아침까지 살아있는 양과 늑대의 수를 의미하는 두 정수를 출력한다.
-
-예제 입력 1
-
-6 6
-...#..
-.##v#.
-#v.#.#
-#.o#.#
-.###.#
-...###
-
-예제 출력 1
-
-0 2
-
-예제 입력 2
-
-8 8
-.######.
-#..o...#
-#.####.#
-#.#v.#.#
-#.#.o#o#
-#o.##..#
-#.v..v.#
-.######.
-
-예제 출력 2
-
-3 1
-
-예제 입력 3
-
-9 12
-.###.#####..
-#.oo#...#v#.
-#..o#.#.#.#.
-#..##o#...#.
-#.#v#o###.#.
-#..#v#....#.
-#...v#v####.
-.####.#vv.o#
-.......####.
-
-예제 출력 3
-
-3 5
-'''
-
-'''
-영역을 규정한다. area_1 = [matrix[r1][c1:c2], matrix[r2][c3:c4]], area_2 = [matrix[r3][c5:c6], matrix[r4][c7:c8], ...] 이런 식으로 규정될 것 같은데.
-
-1. 일단 '#'이 아니어야하고,
-2. 좌측에 #이 있으면 가로 영역 생성, append하다가 우측에 #이 있으면 가로 영역 종료.
-
-근데 윗줄에선 다른 영역인 줄 알았는데 아랫줄에서 합쳐지는 경우는 어떻게 하나?
-#####
-#.#.#
-#...#
-#####
-
-
-3. visited 생성
-4. 좌우가 #이 아니라면 같은 영역으로 append(좌표를 visited에 저장해서 방문한 적 없을 경우에만)
-5. 전제 조건은 테두리 영역이 아니어야 함.
-
-영역 별로 안에 있는 양과 늑대의 수를 구한다.
-
-'''
-# R, C = map(int, input().split())
-# matrix = [input() for _ in range(R)]
-# print(matrix)
-# for i in range(1, R-1):
-#     for j in range(C):
-#         if matrix[i][j] != '#':
+print(total_sheep, total_wolf)
