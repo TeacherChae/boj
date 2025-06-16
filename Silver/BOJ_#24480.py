@@ -40,31 +40,32 @@ import sys
 from collections import defaultdict
 
 input = sys.stdin.readline
-sys.setrecursionlimit(10**6)
 
 N, M, R = map(int, input().split())
-g = {i: [] for i in range(1, N + 1)}
+graph = {i: [] for i in range(1, N + 1)}
 for _ in range(M):
-    a, b = map(int, input().split())
-    g[a].append(b)
-    g[b].append(a)
+    u, v = map(int, input().split())
+    graph[u].append(v)
+    graph[v].append(u)
 
-for k in g:
-    g[k].sort(reverse=True)
-
-def dfs(graph, start, visited, order, cnt):
-    visited.add(start)
-    order[start] = cnt[0]
-    cnt[0] += 1
-    for node in graph[start]:
-        if node not in visited:
-            dfs(graph, node, visited, order, cnt)
+for k in graph:
+    graph[k].sort(reverse=True)
 
 visited = set()
 order = defaultdict(int)
-cnt = [1]
+cnt = 1
 
-dfs(g, R, visited, order, cnt)
+stack = [R]
+
+while stack:
+    node = stack.pop()
+    if node not in visited:
+        visited.add(node)
+        order[node] = cnt
+        cnt += 1
+        for neighbor in reversed(graph[node]):
+            if neighbor not in visited:
+                stack.append(neighbor)
 
 for i in range(1, N + 1):
     print(order[i])
