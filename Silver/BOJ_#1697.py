@@ -20,24 +20,23 @@ import sys
 from collections import deque
 input = sys.stdin.readline
 
-def actions(x):
-    return[x-1, x+1, 2*x]
-
 def bfs(start, end):
-    visited = set([start])
+    MAX = 100001 # 문제에 최대 범위가 주어짐
+    visited = [-1] * MAX # 테이블의 key, value가 아닌 리스트의 인덱싱으로 처리
+    visited[start] = 0
+
     queue = deque([start])
-    graph = [[]*(end-start)]
-    graph[start] = 0
+
     while queue:
-        point = queue.popleft()
-        for n_point in actions(point):
-            if n_point not in visited:
-                visited.add(n_point)
-                queue.append(n_point)
-                graph[n_point] = graph[point] + 1
-            if n_point == end:
-                return graph[end]
+        current = queue.popleft()
+
+        if current == end:
+            return visited[current]
+
+        for next_pos in [current - 1, current + 1, current * 2]:
+            if 0 <= next_pos < MAX and visited[next_pos] == -1: # 범위 안에 있고, 방문한 적이 없으면
+                visited[next_pos] = visited[current] + 1 # 누적
+                queue.append(next_pos)
 
 N, K = map(int, input().split())
 print(bfs(N, K))
-

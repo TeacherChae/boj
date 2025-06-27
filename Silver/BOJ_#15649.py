@@ -64,24 +64,25 @@ import sys
 
 input = sys.stdin.readline
 
-N, M = map(int, input().split())
-
-def dfs(stack, n, m, visited):
-    if len(stack) == m:
-        print(' '.join(map(str, s)))
+def back_tracking(arr, now_length, used_num):
+    if now_length == M:
+        print(*arr)
         return
-    for i in range(1, n+1):
-        if visited[i]:
-            continue
-        visited[i] = True
-        stack.append(i)
-        dfs(stack, n, m, visited)
-        stack.pop()
-        visited[i] = False
-            
+    
+    for idx in range(1, N + 1):
+        if not used_num[idx]:
+            arr.append(idx)
+            used_num[idx]= True
+            back_tracking(arr, now_length + 1, used_num)
+            arr.pop()
+            used_num[idx] = False
+    
 
 N, M = map(int, input().split())
-S = []
-V = [False] * (n+1)
 
-dfs(S, N, M, V)
+# 0번째 인덱스는 더미 인덱스
+nums = [i + 1 for i in range(N + 1)]
+
+used_num = [False] * (N + 1)
+
+back_tracking([], 0, used_num)
