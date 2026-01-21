@@ -3,12 +3,6 @@ from collections import deque
 
 input = sys.stdin.readline
 
-'''
-1. 맵 구성
-2. 행동 정의
-3. 방문 처리(cnt가 포함된 bfs로)
-'''
-
 def bfs(n, r1, c1, r2, c2):
     if r1 == r2 and c1 == c2:
         return 0
